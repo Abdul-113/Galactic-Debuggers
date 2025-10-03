@@ -1,4 +1,4 @@
-# A. P. Shah Institute of Technology - Flask Web Application
+# Attendance Anamoly Detection - Flask Web Application
 
 A modern educational platform built with Flask backend and responsive frontend.
 
