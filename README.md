@@ -1,4 +1,4 @@
-# A. P. Shah Institute of Technology - Flask Web Application
+# Attendance Anamoly Detection - Flask Web Application
 
 A modern educational platform built with Flask backend and responsive frontend.
 
@@ -41,16 +41,19 @@ StyleRefresh/
 ### Installation
 
 1. **Clone or download the project**
+
    ```bash
    cd "D:\Galactic Debuggers\StyleRefresh"
    ```
 
 2. **Install dependencies**
+
    ```bash
    pip install -r requirements.txt
    ```
 
 3. **Run the application**
+
    ```bash
    python app.py
    ```
@@ -65,10 +68,12 @@ StyleRefresh/
 The application comes with pre-configured users for testing:
 
 **Teacher Account:**
+
 - Email: `admin@example.com`
 - Password: `admin123`
 
 **Student Account:**
+
 - Email: `student@example.com`
 - Password: `student123`
 
@@ -96,6 +101,7 @@ The application comes with pre-configured users for testing:
 ### Running in Development Mode
 
 The application runs in debug mode by default, which provides:
+
 - Automatic reloading on code changes
 - Detailed error messages
 - Debug toolbar
@@ -110,27 +116,112 @@ The application runs in debug mode by default, which provides:
 
 1. **New Routes**: Add to `app.py`
 2. **New Templates**: Create in `templates/` directory
-3. **New Static Files**: Add to `static/` directory
-4. **Database**: Replace in-memory storage with a proper database (SQLite, PostgreSQL, etc.)
 
-## Production Deployment
+# Galactic-Debuggers — Flask Attendance & Course Demo
 
-For production deployment:
+This repository is a small Flask web application that demonstrates a simple educational platform with user authentication, course pages, and an attendance-processing flow that can accept an uploaded attendance-sheet image and extract structured attendance data.
 
-1. **Change the secret key** in `app.py`
-2. **Set debug=False** in `app.py`
-3. **Use a production WSGI server** (Gunicorn, uWSGI)
-4. **Set up a reverse proxy** (Nginx, Apache)
-5. **Use a production database**
-6. **Set up proper file storage** (AWS S3, Google Cloud Storage)
+The app ships with a lightweight frontend (templates + static assets) and a basic in-memory user store for quick testing. It's intended as a prototype and learning reference — not production-ready.
 
-## Browser Compatibility
+Prototype (hosted): https://personal-1-gmmn.onrender.com
 
-- Chrome 80+
-- Firefox 75+
-- Safari 13+
-- Edge 80+
+Test credentials
 
-## License
+- Admin / Teacher
+  - Email: admin@example.com
+  - Password: admin123
 
-This project is for educational purposes.
+Quick project layout
+
+```
+Galactic-Debuggers/
+├── app.py              # Flask application entrypoint and routes
+├── processing.py      # Attendance processing (Gemini/OpenCV variants)
+├── requirements.txt   # Python dependencies
+├── templates/         # Jinja2 HTML templates
+└── static/            # CSS / JS / images
+```
+
+Requirements
+
+- Python 3.8+ (Python 3.13 used during development)
+- pip
+
+Getting started (PowerShell)
+
+1. Open PowerShell and change into the project folder:
+
+```powershell
+cd "C:\Users\ZAHID\Desktop\NEw1\Galactic-Debuggers"
+```
+
+2. (Optional) Create and activate a virtual environment:
+
+```powershell
+python -m venv .venv
+C:\Users\ZAHID\Desktop\NEw1\Galactic-Debuggers\.venv\Scripts\Activate.ps1
+```
+
+3. Install dependencies:
+
+```powershell
+python -m pip install -r requirements.txt
+```
+
+4. Run the app:
+
+```powershell
+python .\app.py
+```
+
+5. Open the app in your browser:
+
+http://localhost:5000
+
+Features
+
+- Login and signup pages with session-based auth (in-memory user store)
+- Courses page and static assets
+- Uploads: teachers can upload PDF course materials
+- Attendance processing: UI for uploading an attendance-sheet image and extracting dates and per-student present/absent status (requires configuration if using Gemini API)
+
+Attendance processing notes
+
+- The repo contains two possible processing flows:
+
+  - `processing.py` — a Gemini-based extractor (requires a valid `GOOGLE_API_KEY` in a `.env` file) that sends the uploaded image to Google Gemini to get a structured JSON response.
+  - An OpenCV/Tesseract pipeline variant (also often named `processing.py` in other branches) which performs local OCR and heuristics.
+
+- If you plan to use the Gemini-based processor, create a `.env` file next to `processing.py` with the key:
+
+```
+GOOGLE_API_KEY=your_api_key_here
+```
+
+If the key is not set, the app will return a clear runtime error from the attendance API explaining the missing key.
+
+API endpoints (selected)
+
+- POST /api/login – JSON { email, password }
+- POST /api/signup – JSON { firstName, lastName, email, password }
+- POST /api/upload – Teacher-only file upload (PDF)
+- POST /api/process_attendance – Accepts multipart form image upload (attendance sheet) and returns a JSON report
+
+Development tips
+
+- The app runs in Flask's debug mode by default in `app.py` for rapid development. Turn off debug and set a secure `secret_key` for production.
+- Replace the simple in-memory `users` dict with a real database for anything beyond demos.
+
+Troubleshooting
+
+- If Flask fails to start because port 5000 is in use, change the port in `app.py` or stop the conflicting process.
+- If you get errors from the Gemini call, verify your `.env` and `GOOGLE_API_KEY`, and ensure your billing/API access is properly set up with your Google Cloud project.
+
+License & Notes
+
+This code is provided for educational/demo purposes. Do not use the development server or in-memory user store in production.
+
+If you want, I can:
+
+- Wire the Gemini-based `processing.py` safely so the app starts even without a key and returns friendly errors.
+- Add the `/attendance` page and API endpoint (upload UI) and a small smoke-test script.
